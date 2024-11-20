@@ -1,5 +1,27 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config'
 
-// https://astro.build/config
-export default defineConfig({});
+import cloudflare from '@astrojs/cloudflare'
+
+export default defineConfig({
+    output: 'hybrid',
+    adapter: cloudflare(),
+    site: 'https://estudio.francodreer.com',
+    experimental: {
+        env: {
+            schema: {
+                SUPABASE_URL: envField.string({
+                    context: 'server',
+                    access: 'secret',
+                    url: true,
+                    optional: false
+                }),
+                SUPABASE_KEY: envField.string({
+                    context: 'server',
+                    access: 'secret',
+                    optional: false
+                })
+            }
+        }
+    }
+})

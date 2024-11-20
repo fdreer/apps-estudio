@@ -1,16 +1,52 @@
 ---
+export const prerender = false
 
+import Layout from '@/layouts/Layout.astro'
+import Form from '@/components/Form.astro'
+import App from '@/components/App.astro'
+import { authenticate } from '@/lib/supabase'
+import { APPS } from '@/consts'
+
+const { cookies } = Astro
+const { isAuth } = await authenticate(cookies)
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="GALLO DREER Apps">
+    <main>
+        <h1>GALLO & DREER APPS</h1>
+
+        {
+            isAuth ? (
+                <>
+                    <p>¡Tienes acceso a las aplicaciones de GALLO & DREER!</p>
+                    <ul>
+                        {APPS.map(a => (
+                            <li>{<App name={a.name} link={a.link} />}</li>
+                        ))}
+                    </ul>
+                </>
+            ) : (
+                <Form />
+            )
+        }
+    </main>
+</Layout>
+
+<style>
+    main {
+        margin: auto;
+        padding: 1rem;
+        width: 800px;
+        max-width: calc(100% - 2rem);
+        color: white;
+        font-size: 20px;
+        line-height: 1.6;
+    }
+    h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        line-height: 1;
+        text-align: center;
+        margin-bottom: 1em;
+    }
+</style>
