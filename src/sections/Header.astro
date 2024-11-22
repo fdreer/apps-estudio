@@ -1,0 +1,38 @@
+---
+import Logout from '@/components/Logout.astro'
+import Container from '@/components/Container.astro'
+import { Image } from 'astro:assets'
+import myPhoto from '@/assets/img/g.png'
+
+interface Props {
+    isAuth: boolean
+}
+
+const { isAuth } = Astro.props
+---
+
+<Container>
+    <header>
+        <a href="/">
+            <figure>
+                <Image class="logo" src={myPhoto} alt="Logo" />
+            </figure>
+        </a>
+        {isAuth ? <Logout /> : null}
+    </header>
+</Container>
+
+<style>
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 auto;
+        max-width: 380px;
+
+        .logo {
+            width: 80px;
+            height: 80px;
+        }
+    }
+</style>

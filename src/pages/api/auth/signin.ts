@@ -18,7 +18,10 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     })
 
     if (error) {
-        return new Response(error.message, { status: 500 })
+        const { status, code, message } = error
+        console.log(status, code, message)
+
+        return new Response(error.message, { status })
     }
 
     const { access_token, refresh_token } = data.session

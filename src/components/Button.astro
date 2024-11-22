@@ -1,0 +1,29 @@
+---
+interface Props {
+    text: string
+    id?: string
+}
+
+const { text, id } = Astro.props
+---
+
+<button type="submit" id={id}>
+    {text}
+</button>
+
+<style>
+    button {
+        font-weight: 700;
+        font-size: 1.25rem;
+
+        border: none;
+        border-radius: 4px;
+        max-width: 100%;
+
+        padding: 10px;
+        cursor: pointer;
+        color: white;
+
+        background-color: var(--color-primary);
+    }
+</style>

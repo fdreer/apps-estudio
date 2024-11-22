@@ -2,51 +2,29 @@
 export const prerender = false
 
 import Layout from '@/layouts/Layout.astro'
-import Form from '@/components/Form.astro'
 import App from '@/components/App.astro'
 import { authenticate } from '@/lib/supabase'
 import { APPS } from '@/consts'
+import Header from '@/sections/Header.astro'
+import Container from '@/components/Container.astro'
 
-const { cookies } = Astro
-const { isAuth } = await authenticate(cookies)
+const { isAuth } = await authenticate(Astro.cookies)
+
+if (!isAuth) {
+    return Astro.redirect('/login')
+}
 ---
 
-<Layout title="GALLO DREER Apps">
+<Layout title="GALLO DREER APPS">
+    <Header isAuth={true} />
     <main>
-        <h1>GALLO & DREER APPS</h1>
-
-        {
-            isAuth ? (
-                <>
-                    <p>¡Tienes acceso a las aplicaciones de GALLO & DREER!</p>
-                    <ul>
-                        {APPS.map(a => (
-                            <li>{<App name={a.name} link={a.link} />}</li>
-                        ))}
-                    </ul>
-                </>
-            ) : (
-                <Form />
-            )
-        }
+        <Container>
+            <h1>GALLO & DREER APPS</h1>
+            <h2>Aplicaciones disponibles</h2>
+            <ul>
+                <!-- TODO: deberiamos hacer cars por cada aplicación -->
+                {APPS.map(a => <li>{<App name={a.name} link={a.link} />}</li>)}
+            </ul>
+        </Container>
     </main>
 </Layout>
-
-<style>
-    main {
-        margin: auto;
-        padding: 1rem;
-        width: 800px;
-        max-width: calc(100% - 2rem);
-        color: white;
-        font-size: 20px;
-        line-height: 1.6;
-    }
-    h1 {
-        font-size: 4rem;
-        font-weight: 700;
-        line-height: 1;
-        text-align: center;
-        margin-bottom: 1em;
-    }
-</style>

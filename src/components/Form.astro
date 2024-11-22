@@ -1,7 +1,105 @@
-<form action="/api/auth/signin" method="post">
-    <label for="email">Correo electrónico</label>
-    <input type="email" name="email" id="email" required />
-    <label for="password">Contraseña</label>
-    <input type="password" name="password" id="password" required />
-    <button type="submit">Iniciar sesión</button>
+---
+import Button from './Button.astro'
+---
+
+<form>
+    <label>
+        Correo electrónico
+        <input type="email" name="email" required />
+    </label>
+    <label>
+        Contraseña
+        <input type="password" name="password" required />
+    </label>
+    <Button text="Iniciar Sesión" />
+    <span id="error-msg"></span>
 </form>
+
+<script>
+    import { $ } from '@/lib/dom-selector'
+
+    const $form = $('form') as HTMLFormElement
+    const $error = $('#error-msg', $form) as HTMLSpanElement
+
+    const handleSubmit = async (e: SubmitEvent) => {
+        e.preventDefault()
+
+        const form = e.target as HTMLFormElement // Asegura el tipo correcto
+        const formData = new FormData(form)
+
+        const email = formData.get('email')?.toString().trim() || ''
+        const password = formData.get('password')?.toString().trim() || ''
+
+        if (!email || !password) {
+            alert('Por favor, completa todos los campos.')
+            return
+        }
+
+        // Deshabilita el botón de envío para prevenir múltiples solicitudes
+        const submitButton = form.querySelector(
+            'button[type="submit"]'
+        ) as HTMLButtonElement
+
+        if (submitButton) {
+            submitButton.textContent = 'Autenticando...'
+            submitButton.disabled = true
+        }
+
+        try {
+            const res = await fetch('/api/auth/signin', {
+                method: 'POST',
+                body: formData
+            })
+
+            if (!res.ok) {
+                const error = await res.text()
+                throw new Error(error)
+            }
+
+            window.location.href = '/'
+        } catch (error) {
+            // alert(
+            //     `Error en el inicio de sesión: ${error instanceof Error ? error.message : error}`
+            // )
+            $error.textContent = error as string
+            $error.style.display = 'block'
+            console.log(error)
+        } finally {
+            if (submitButton) {
+                submitButton.disabled = false
+                submitButton.textContent = 'Iniciar Sesión'
+            }
+        }
+    }
+
+    if ($form) {
+        $form.addEventListener('submit', handleSubmit)
+    }
+</script>
+
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 380px;
+        margin: 0 auto;
+        font-size: 1.3rem;
+        font-weight: 500;
+
+        #error-msg {
+            display: none;
+
+            color: var(--color-primary);
+            text-align: center;
+        }
+    }
+    input {
+        border: 1px solid var(--color-text);
+        border-radius: 4px;
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        box-sizing: border-box;
+    }
+</style>
