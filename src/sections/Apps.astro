@@ -1,0 +1,30 @@
+---
+import App from '@/components/App.astro'
+import Container from '@/components/Container.astro'
+import { APPS } from '@/consts'
+---
+
+<Container>
+    <section>
+        <h1>GALLO & DREER APPS</h1>
+        <article>
+            <h2>Aplicaciones disponibles</h2>
+            <ul>
+                <!-- TODO: deberiamos hacer cars por cada aplicación -->
+                {APPS.map(a => <li>{<App name={a.name} link={a.link} />}</li>)}
+            </ul>
+        </article>
+    </section>
+</Container>
+
+<style>
+    section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        gap: 30px;
+        max-width: 405px;
+        margin: 0 auto;
+    }
+</style>

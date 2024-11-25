@@ -1,11 +1,10 @@
 ---
 export const prerender = false
 
-import Container from '@/components/Container.astro'
-import Form from '@/components/Form.astro'
 import Layout from '@/layouts/Layout.astro'
-import { authenticate } from '@/lib/supabase'
 import Header from '@/sections/Header.astro'
+import Auth from '@/sections/Auth.astro'
+import { authenticate } from '@/lib/supabase'
 
 const { isAuth } = await authenticate(Astro.cookies)
 if (isAuth) {
@@ -15,10 +14,7 @@ if (isAuth) {
 
 <Layout title="Página de autenticación">
     <Header isAuth={false} />
-    <Container>
-        <main>
-            <h1>Página de Autenticación</h1>
-            <Form />
-        </main>
-    </Container>
+    <main>
+        <Auth />
+    </main>
 </Layout>

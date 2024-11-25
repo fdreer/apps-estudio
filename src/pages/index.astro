@@ -2,11 +2,9 @@
 export const prerender = false
 
 import Layout from '@/layouts/Layout.astro'
-import App from '@/components/App.astro'
-import { authenticate } from '@/lib/supabase'
-import { APPS } from '@/consts'
 import Header from '@/sections/Header.astro'
-import Container from '@/components/Container.astro'
+import Apps from '@/sections/Apps.astro'
+import { authenticate } from '@/lib/supabase'
 
 const { isAuth } = await authenticate(Astro.cookies)
 
@@ -16,15 +14,8 @@ if (!isAuth) {
 ---
 
 <Layout title="GALLO DREER APPS">
-    <Header isAuth={true} />
+    <Header isAuth={isAuth} />
     <main>
-        <Container>
-            <h1>GALLO & DREER APPS</h1>
-            <h2>Aplicaciones disponibles</h2>
-            <ul>
-                <!-- TODO: deberiamos hacer cars por cada aplicación -->
-                {APPS.map(a => <li>{<App name={a.name} link={a.link} />}</li>)}
-            </ul>
-        </Container>
+        <Apps />
     </main>
 </Layout>

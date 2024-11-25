@@ -1,0 +1,23 @@
+---
+import Container from '@/components/Container.astro'
+import Form from '@/components/Form.astro'
+---
+
+<Container>
+    <section>
+        <h1>Página de Autenticación</h1>
+        <Form />
+    </section>
+</Container>
+
+<style>
+    section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        gap: 30px;
+        max-width: 405px;
+        margin: 0 auto;
+    }
+</style>
